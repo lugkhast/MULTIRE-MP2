@@ -5,6 +5,7 @@
  */
 package multire.mp1.search;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -12,7 +13,9 @@ import java.io.File;
  * @author lugkhast
  */
 public abstract class PreprocessedImage {
+
     private File imageFile;
+    private BufferedImage image;
 
     /**
      * @return the imageFile
@@ -26,5 +29,19 @@ public abstract class PreprocessedImage {
      */
     public void setImageFile(File imageFile) {
         this.imageFile = imageFile;
+    }
+
+    /**
+     * @return the image
+     */
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    /**
+     * @param image the image to set
+     */
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 }

@@ -5,9 +5,6 @@
  */
 package multire.mp1.search;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-
 /**
  *
  * @author lugkhast
@@ -15,16 +12,9 @@ import java.io.File;
 public class SearchResult {
 
     private double score;
-    private BufferedImage image;
-    private File imageFile;
+    private PreprocessedImage preprocessedImage;
 
     public SearchResult() {
-    }
-
-    public SearchResult(double score, BufferedImage image, File imageFile) {
-        this.score = score;
-        this.image = image;
-        this.imageFile = imageFile;
     }
 
     /**
@@ -42,30 +32,16 @@ public class SearchResult {
     }
 
     /**
-     * @return the image
+     * @return the preprocessedImage
      */
-    public BufferedImage getImage() {
-        return image;
+    public PreprocessedImage getPreprocessedImage() {
+        return preprocessedImage;
     }
 
     /**
-     * @param image the image to set
+     * @param preprocessedImage the preprocessedImage to set
      */
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
-    /**
-     * @return the imageFile
-     */
-    public File getImageFile() {
-        return imageFile;
-    }
-
-    /**
-     * @param imageFile the imageFile to set
-     */
-    public void setImageFile(File imageFile) {
-        this.imageFile = imageFile;
+    public void setPreprocessedImage(PreprocessedImage preprocessedImage) {
+        this.preprocessedImage = preprocessedImage;
     }
 }
