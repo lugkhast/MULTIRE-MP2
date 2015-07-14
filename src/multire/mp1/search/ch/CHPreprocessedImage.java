@@ -20,16 +20,16 @@ import java.awt.image.ColorModel;
  * @author Earl
  */
 public class CHPreprocessedImage extends PreprocessedImage{
-    int[] chLUV = new int[4];
+    final static int[] chLUV = new int[4];
     
-    private void createCH(int index){
+    private static void createCH(int index){
         if(index >= 0 && index <= 39){ chLUV[0]++; }
         else if(index >= 40 && index <= 79){ chLUV[1]++; }
         else if(index >= 80 && index <= 119){ chLUV[2]++; }
         else if(index >= 120 && index <= 158){ chLUV[3]++; }
     }
     
-    private void convertRGBToLUV(BufferedImage image){
+    private static void convertRGBtoLUV(BufferedImage image){
         ColorModel CM;
         double answer=0, RGB;
         double imageHeight, imageWidth;
@@ -60,7 +60,7 @@ public class CHPreprocessedImage extends PreprocessedImage{
     public static void main(String[] args) {
         System.out.println("Starting!");
         File imagefile = new File("/home/lugkhast/Desktop/calmdown.jpg");
-        BufferedImage srcImg;
+        BufferedImage srcImg = null;
 
         try {
             srcImg = ImageIO.read(imagefile);
@@ -68,6 +68,8 @@ public class CHPreprocessedImage extends PreprocessedImage{
         } catch (IOException ex) {
             Logger.getLogger(CHPreprocessedImage.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        convertRGBtoLUV(srcImg);
         
         System.out.println("Done!");
     }
