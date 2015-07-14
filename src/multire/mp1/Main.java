@@ -5,12 +5,11 @@
  */
 package multire.mp1;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import multire.mp1.gui.MainWindow;
 
 /**
  *
@@ -18,18 +17,23 @@ import javax.imageio.ImageIO;
  */
 public class Main {
 
+    public static void setLAF() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         System.out.println("Hello, world!");
-        File file = null;
-        
-        try {
-            BufferedImage image = ImageIO.read(file);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        setLAF();
+
+        MainWindow window = new MainWindow();
+        window.setVisible(true);
     }
 
 }
