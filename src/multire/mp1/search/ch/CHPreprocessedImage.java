@@ -20,20 +20,48 @@ import java.awt.image.ColorModel;
  * @author Earl
  */
 public class CHPreprocessedImage extends PreprocessedImage{
-    final static int[] chLUV = new int[4];
+    int[] chLUV = new int[4];
+    double totalPixels;
     
-    private static void createCH(int index){
+    private void createCH(int index){
         if(index >= 0 && index <= 39){ chLUV[0]++; }
         else if(index >= 40 && index <= 79){ chLUV[1]++; }
         else if(index >= 80 && index <= 119){ chLUV[2]++; }
         else if(index >= 120 && index <= 158){ chLUV[3]++; }
     }
     
-    private static void convertRGBtoLUV(BufferedImage image){
+    //compares the histogram of the query image from one of images from the database
+    private double ColorHistogramMethod(int [] histogramQuery, int [] histogramToMatch) {
+        int totalPixelQuery = 0, totalPixelMatch = 0;
+        double[] NHA = new double[4];
+        double[] NHB = new double[4];
+        double[] NHcompare = new double[4];
+        double similarityAB = 0; 
+        
+        for(int i=0; i < 4; i++){ totalPixelQuery += histogramQuery[i]; }
+        for(int j=0; j < 4; j++){ totalPixelMatch += histogramToMatch[j];}
+        
+        for(int i=0; i < 4; i++){
+            NHA[i] = histogramQuery[i] / totalPixelQuery;
+        }
+        for(int i=0; i < 4; i++){
+            NHB[i] = histogramToMatch[i] / totalPixelMatch;
+        }
+        for(int i=0; i < 4; i++){
+            if(NHA[i] > NHB[i]){ NHcompare[i] = NHA[i]; }
+            else { NHcompare[i] = NHB[i]; }
+        }
+        for(int i=0; i < 4; i++){
+            similarityAB += 1 - (Math.abs(NHA[i] - NHB[i]) / NHcompare[i]);
+        }
+        
+        return (similarityAB/4);
+    }
+    
+    private void convertRGBtoLUV(BufferedImage image){
         ColorModel CM;
         double answer=0, RGB;
         double imageHeight, imageWidth;
-        double totalPixels;
         double R, G, B;
         int index;
         cieConvert ColorCIE = new cieConvert();
@@ -55,22 +83,5 @@ public class CHPreprocessedImage extends PreprocessedImage{
                 index = ColorCIE.IndexOf();
                 createCH(index);
             }           
-    }
-    
-    public static void main(String[] args) {
-        System.out.println("Starting!");
-        File imagefile = new File("/home/lugkhast/Desktop/calmdown.jpg");
-        BufferedImage srcImg = null;
-
-        try {
-            srcImg = ImageIO.read(imagefile);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(CHPreprocessedImage.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        convertRGBtoLUV(srcImg);
-        
-        System.out.println("Done!");
     }
 }
