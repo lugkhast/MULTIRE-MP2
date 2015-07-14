@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import multire.mp1.search.PreprocessedImage;
-import multire.mp1.provided.cieConvert;
+import multire.mp1.cie.cieConvert;
 import java.awt.image.ColorModel;
 
 /**
