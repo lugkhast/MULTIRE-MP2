@@ -29,7 +29,32 @@ public class HRCCSearchStrategy implements SearchStrategy {
 
     @Override
     public double compareImageFiles(PreprocessedImage queryImage, PreprocessedImage datasetImage) {
-        return 0.0;
+        double totalDifference = 0.0;
+
+        // Color Coherence II, in "06 - Image Retrieval.ppt"
+        // queryImage is I, datasetImage is I'
+        HRCCPreprocessedImage hrccQueryImg = (HRCCPreprocessedImage) queryImage;
+        HRCCPreprocessedImage hrccDatasetImg = (HRCCPreprocessedImage) datasetImage;
+        int coherentDifference, incoherentDifference;
+
+        List<Integer> queryCoherent, queryIncoherent, dsCoherent, dsIncoherent;
+        queryCoherent = hrccQueryImg.getCoherentColors();
+        queryIncoherent = hrccQueryImg.getIncoherentColors();
+        dsCoherent = hrccDatasetImg.getCoherentColors();
+        dsIncoherent = hrccDatasetImg.getIncoherentColors();
+
+        for (int i = 0; i < BIN_COUNT; i++) {
+            coherentDifference = Math.abs(
+                    queryCoherent.get(i) - dsCoherent.get(i)
+            );
+            incoherentDifference = Math.abs(
+                    queryIncoherent.get(i) - dsIncoherent.get(i)
+            );
+
+            totalDifference += coherentDifference + incoherentDifference;
+        }
+
+        return totalDifference;
     }
 
     private int getBinFromRGB(int rgb) {
@@ -170,16 +195,23 @@ public class HRCCSearchStrategy implements SearchStrategy {
     }
 
     public static void main(String[] args) {
-        File file;
+        File file, similar, different;
         HRCCPreprocessedImage img = null;
+        PreprocessedImage prepSimilar = null, prepDifferent = null;
         SearchStrategy strategy;
         System.out.println("Starting...");
 
         file = new File("/home/lugkhast/Desktop/calmdown.jpg");
+        similar = new File("/home/lugkhast/Desktop/calmdownblurred.jpg");
+        different = new File("/home/lugkhast/Desktop/moefist.jpg");
         strategy = new HRCCSearchStrategy();
         try {
             System.out.println("Preprocessing...");
             img = (HRCCPreprocessedImage) strategy.preprocessImage(file);
+
+            System.out.println("Preprocessing comparison images...");
+            prepSimilar = strategy.preprocessImage(similar);
+            prepDifferent = strategy.preprocessImage(different);
         } catch (IOException ex) {
             Logger.getLogger(HRCCSearchStrategy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -196,6 +228,12 @@ public class HRCCSearchStrategy implements SearchStrategy {
                 );
             }
         }
+
+        double diff1 = strategy.compareImageFiles(img, prepSimilar);
+        double diff2 = strategy.compareImageFiles(img, prepDifferent);
+
+        System.out.printf("Different with caldownblurred.jpg: %f\n", diff1);
+        System.out.printf("Different with moefist.jpg: %f\n", diff2);
 
         System.out.println("Done!");
     }
