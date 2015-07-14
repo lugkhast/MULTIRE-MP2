@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,14 +51,27 @@ public class ImageSearchEngine {
 
     }
 
-    public List<SearchResult> runImageSearch(File queryImageFile) {
+    public List<SearchResult> runImageSearch(File queryImageFile) throws IOException {
         if (searchStrategy == null || directoryToSearch == null) {
             return null;
         }
 
         List<SearchResult> results = new ArrayList<>();
+        SearchResult result;
+        PreprocessedImage prepQueryImg = searchStrategy.preprocessImage(queryImageFile);
 
-        return null;
+        for (PreprocessedImage prepDbImg : preprocessedImages) {
+            result = new SearchResult();
+            result.setScore(
+                    searchStrategy.compareImageFiles(prepQueryImg, prepDbImg)
+            );
+            result.setPreprocessedImage(prepDbImg);
+            results.add(result);
+        }
+
+        Collections.sort(results);
+
+        return results;
     }
 
     /**
@@ -83,6 +97,7 @@ public class ImageSearchEngine {
 
     /**
      * @param directoryToSearch the directoryToSearch to set
+     * @throws java.io.IOException
      */
     public void setDirectoryToSearch(File directoryToSearch) throws IOException {
         this.directoryToSearch = directoryToSearch;
@@ -105,13 +120,27 @@ public class ImageSearchEngine {
 
     public static void main(String[] args) {
         File directory = new File("/home/lugkhast/Desktop/MULTIRE/");
+        File query = new File("/home/lugkhast/Desktop/MULTIRE/calmdown.jpg");
         ImageSearchEngine searchEngine = new ImageSearchEngine();
         SearchStrategy strategy = new HRCCSearchStrategy();
+        List<SearchResult> results;
 
         try {
             System.out.println("Starting...");
             searchEngine.setSearchStrategy(strategy);
             searchEngine.setDirectoryToSearch(directory);
+
+            System.out.println("Running image search...");
+            results = searchEngine.runImageSearch(query);
+
+            System.out.println("RESULTS:");
+            for (SearchResult result : results) {
+                System.out.printf(
+                        "[%10.2f] %s\n",
+                        result.getScore(),
+                        result.getPreprocessedImage().getImageFile().getName()
+                );
+            }
         } catch (IOException ex) {
             Logger.getLogger(ImageSearchEngine.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -9,7 +9,7 @@ package multire.mp1.search;
  *
  * @author lugkhast
  */
-public class SearchResult {
+public class SearchResult implements Comparable<SearchResult> {
 
     private double score;
     private PreprocessedImage preprocessedImage;
@@ -43,5 +43,18 @@ public class SearchResult {
      */
     public void setPreprocessedImage(PreprocessedImage preprocessedImage) {
         this.preprocessedImage = preprocessedImage;
+    }
+
+    @Override
+    public int compareTo(SearchResult otherResult) {
+        double difference = this.score - otherResult.score;
+        
+        if (difference < 0) {
+            return -1;
+        } else if (difference > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
