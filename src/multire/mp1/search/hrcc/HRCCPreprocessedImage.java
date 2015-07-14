@@ -97,8 +97,8 @@ public class HRCCPreprocessedImage extends PreprocessedImage {
 
     public static void main(String[] args) {
         System.out.println("Starting!");
-        File file = new File("/home/lugkhast/Desktop/calmdown.jpg");
-        File outFile = new File("/home/lugkhast/Desktop/calmdownblurred.jpg");
+        File file = new File("/home/lugkhast/Desktop/MULTIRE/calmdown.jpg");
+        File outFile = new File("/home/lugkhast/Desktop/MULTIRE/calmdownblurred.jpg");
         BufferedImage srcImg, blurredImg;
         HRCCPreprocessedImage prepImg = new HRCCPreprocessedImage();
 

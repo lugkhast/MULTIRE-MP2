@@ -201,9 +201,9 @@ public class HRCCSearchStrategy implements SearchStrategy {
         SearchStrategy strategy;
         System.out.println("Starting...");
 
-        file = new File("/home/lugkhast/Desktop/calmdown.jpg");
-        similar = new File("/home/lugkhast/Desktop/calmdownblurred.jpg");
-        different = new File("/home/lugkhast/Desktop/moefist.jpg");
+        file = new File("/home/lugkhast/Desktop/MULTIRE/calmdown.jpg");
+        similar = new File("/home/lugkhast/Desktop/MULTIRE/calmdownblurred.jpg");
+        different = new File("/home/lugkhast/Desktop/MULTIRE/moefist.jpg");
         strategy = new HRCCSearchStrategy();
         try {
             System.out.println("Preprocessing...");
