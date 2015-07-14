@@ -7,7 +7,6 @@ package multire.mp1.search.hrcc;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -48,16 +47,8 @@ public class HRCCSearchStrategy implements SearchStrategy {
 
     private int getBinFromCoord(BufferedImage image, CoherenceCoord coord) {
         int rgb;
-//        double red, green, blue;
-//        ColorModel colorModel = image.getColorModel();
-//        cieConvert converter = new cieConvert();
 
         rgb = image.getRGB(coord.x, coord.y);
-//        red = colorModel.getRed(rgb);
-//        green = colorModel.getGreen(rgb);
-//        blue = colorModel.getBlue(rgb);
-//        converter.setValues(red / 255.0, green / 255.0, blue / 255.0);
-
         return getBinFromRGB(rgb);
     }
 
@@ -157,7 +148,7 @@ public class HRCCSearchStrategy implements SearchStrategy {
         SearchStrategy strategy;
         System.out.println("Starting...");
 
-        file = new File("/home/lugkhast/Desktop/calmdown.jpg");
+        file = new File("/home/lugkhast/Desktop/calmdownblurred.jpg");
         strategy = new HRCCSearchStrategy();
         try {
             System.out.println("Preprocessing...");
