@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -21,7 +23,16 @@ import multire.mp1.search.PreprocessedImage;
 public class HRCCPreprocessedImage extends PreprocessedImage {
 
     private BufferedImage blurredImage;
+    private List<Integer> coherentColors;
+    private List<Integer> incoherentColors;
 
+    public HRCCPreprocessedImage() {
+        super();
+        
+        coherentColors = new ArrayList<Integer>();
+        incoherentColors = new ArrayList<Integer>();
+    }
+    
     private int computeBlurredPixelRGB(BufferedImage image, int x, int y) {
         Color pixelColor, tmpColor;
         ColorAverager colorAverager = new ColorAverager();
@@ -81,6 +92,7 @@ public class HRCCPreprocessedImage extends PreprocessedImage {
         super.setImage(image);
 
         BufferedImage newImage = this.blurImage(this.getImage());
+        blurredImage = newImage;
     }
 
     public static void main(String[] args) {
@@ -102,5 +114,40 @@ public class HRCCPreprocessedImage extends PreprocessedImage {
         }
 
         System.out.println("Done!");
+    }
+
+    /**
+     * @return the blurredImage
+     */
+    public BufferedImage getBlurredImage() {
+        return blurredImage;
+    }
+
+    /**
+     * @return the coherentColors
+     */
+    public List<Integer> getCoherentColors() {
+        return coherentColors;
+    }
+
+    /**
+     * @param coherentColors the coherentColors to set
+     */
+    public void setCoherentColors(List<Integer> coherentColors) {
+        this.coherentColors = coherentColors;
+    }
+
+    /**
+     * @return the incoherentColors
+     */
+    public List<Integer> getIncoherentColors() {
+        return incoherentColors;
+    }
+
+    /**
+     * @param incoherentColors the incoherentColors to set
+     */
+    public void setIncoherentColors(List<Integer> incoherentColors) {
+        this.incoherentColors = incoherentColors;
     }
 }
