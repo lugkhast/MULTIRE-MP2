@@ -104,23 +104,42 @@ public class HRCCSearchStrategy implements SearchStrategy {
         return totalCoherent;
     }
 
+    private Integer[] countColorsByBin(BufferedImage image) {
+        Integer[] incoherentCountPerBin = new Integer[BIN_COUNT];
+        CoherenceCoord coord = new CoherenceCoord(0, 0, null);
+        int bin;
+        Arrays.fill(incoherentCountPerBin, 0);
+
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                coord.x = i;
+                coord.y = j;
+
+                bin = getBinFromCoord(image, coord);
+                incoherentCountPerBin[bin] += 1;
+            }
+        }
+
+        return incoherentCountPerBin;
+    }
+
     @Override
     public PreprocessedImage preprocessImage(File imageFile) throws IOException {
         boolean[][] checkedPixels;
         int coherentCount, bin;
         Integer[] coherentCountPerBin = new Integer[BIN_COUNT];
         Integer[] incoherentCountPerBin = new Integer[BIN_COUNT];
+        Integer[] totalPixelsPerBin;
         HRCCPreprocessedImage preppedImage = new HRCCPreprocessedImage();
         BufferedImage inputImage, blurredImage;
         CoherenceCoord coord;
-        
+
         inputImage = ImageIO.read(imageFile);
         preppedImage.setImageFile(imageFile);
         preppedImage.setImage(inputImage);
         blurredImage = preppedImage.getBlurredImage();
 
         Arrays.fill(coherentCountPerBin, 0);
-        Arrays.fill(incoherentCountPerBin, 0);
 
         // The actual algorithm starts here
         // Count coherent pixels
@@ -136,6 +155,12 @@ public class HRCCSearchStrategy implements SearchStrategy {
                     coherentCountPerBin[bin] += coherentCount;
                 }
             }
+        }
+
+        // Count noncoherent pixels
+        totalPixelsPerBin = countColorsByBin(blurredImage);
+        for (int i = 0; i < BIN_COUNT; i++) {
+            incoherentCountPerBin[i] = totalPixelsPerBin[i] - coherentCountPerBin[i];
         }
 
         preppedImage.setCoherentColors(Arrays.asList(coherentCountPerBin));
@@ -160,9 +185,15 @@ public class HRCCSearchStrategy implements SearchStrategy {
         }
 
         if (img != null) {
-            List<Integer> bins = img.getCoherentColors();
-            for (int i = 0; i < bins.size(); i++) {
-                System.out.printf("Bin %d: %d\n", i + 1, bins.get(i));
+            List<Integer> coherentBins = img.getCoherentColors();
+            List<Integer> incoherentBins = img.getIncoherentColors();
+            for (int i = 0; i < coherentBins.size(); i++) {
+                System.out.printf(
+                        "Bin %d: %d | %d\n",
+                        i + 1,
+                        coherentBins.get(i),
+                        incoherentBins.get(i)
+                );
             }
         }
 
