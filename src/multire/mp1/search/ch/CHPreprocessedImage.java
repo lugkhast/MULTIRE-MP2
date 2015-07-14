@@ -31,11 +31,15 @@ public class CHPreprocessedImage extends PreprocessedImage{
     }
     
     //compares the histogram of the query image from one of images from the database
-    private double ColorHistogramMethod(int [] histogramQuery, int totalPixelQuery, int [] histogramToMatch, int totalPixelMatch) {
+    private double ColorHistogramMethod(int [] histogramQuery, int [] histogramToMatch) {
+        int totalPixelQuery = 0, totalPixelMatch = 0;
         double[] NHA = new double[4];
         double[] NHB = new double[4];
         double[] NHcompare = new double[4];
         double similarityAB = 0; 
+        
+        for(int i=0; i < 4; i++){ totalPixelQuery += histogramQuery[i]; }
+        for(int j=0; j < 4; j++){ totalPixelMatch += histogramToMatch[j];}
         
         for(int i=0; i < 4; i++){
             NHA[i] = histogramQuery[i] / totalPixelQuery;
