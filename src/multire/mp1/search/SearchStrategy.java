@@ -6,6 +6,7 @@
 package multire.mp1.search;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -15,5 +16,5 @@ public interface SearchStrategy {
 
     double compareImageFiles(PreprocessedImage queryImage, PreprocessedImage datasetImage);
 
-    PreprocessedImage preprocessImage(File imageFile);
+    PreprocessedImage preprocessImage(File imageFile) throws IOException;
 }
