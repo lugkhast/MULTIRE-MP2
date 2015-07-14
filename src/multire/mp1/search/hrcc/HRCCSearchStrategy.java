@@ -111,26 +111,28 @@ public class HRCCSearchStrategy implements SearchStrategy {
         Integer[] coherentCountPerBin = new Integer[BIN_COUNT];
         Integer[] incoherentCountPerBin = new Integer[BIN_COUNT];
         HRCCPreprocessedImage preppedImage = new HRCCPreprocessedImage();
-        BufferedImage inputImage = ImageIO.read(imageFile);
+        BufferedImage inputImage, blurredImage;
         CoherenceCoord coord;
-
+        
+        inputImage = ImageIO.read(imageFile);
         preppedImage.setImageFile(imageFile);
         preppedImage.setImage(inputImage);
+        blurredImage = preppedImage.getBlurredImage();
 
         Arrays.fill(coherentCountPerBin, 0);
         Arrays.fill(incoherentCountPerBin, 0);
 
         // The actual algorithm starts here
         // Count coherent pixels
-        checkedPixels = new boolean[inputImage.getWidth()][inputImage.getHeight()];
-        for (int i = 0; i < inputImage.getWidth(); i++) {
-            for (int j = 0; j < inputImage.getHeight(); j++) {
+        checkedPixels = new boolean[blurredImage.getWidth()][blurredImage.getHeight()];
+        for (int i = 0; i < blurredImage.getWidth(); i++) {
+            for (int j = 0; j < blurredImage.getHeight(); j++) {
                 // System.out.printf("Starting check at (%d, %d)\n", i, j);
                 coord = new CoherenceCoord(i, j, null);
-                coherentCount = countCoherentFromCoord(inputImage, coord, checkedPixels);
+                coherentCount = countCoherentFromCoord(blurredImage, coord, checkedPixels);
 
                 if (coherentCount > COHERENCE_THRESHOLD) {
-                    bin = getBinFromCoord(inputImage, coord);
+                    bin = getBinFromCoord(blurredImage, coord);
                     coherentCountPerBin[bin] += coherentCount;
                 }
             }
@@ -148,7 +150,7 @@ public class HRCCSearchStrategy implements SearchStrategy {
         SearchStrategy strategy;
         System.out.println("Starting...");
 
-        file = new File("/home/lugkhast/Desktop/calmdownblurred.jpg");
+        file = new File("/home/lugkhast/Desktop/calmdown.jpg");
         strategy = new HRCCSearchStrategy();
         try {
             System.out.println("Preprocessing...");
