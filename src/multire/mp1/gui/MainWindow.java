@@ -163,11 +163,6 @@ public class MainWindow extends javax.swing.JFrame implements SearchWorker.ISear
             .addContainerGap())
     );
 
-    imageList.setModel(new javax.swing.AbstractListModel() {
-        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-        public int getSize() { return strings.length; }
-        public Object getElementAt(int i) { return strings[i]; }
-    });
     jScrollPane1.setViewportView(imageList);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -197,7 +192,7 @@ public class MainWindow extends javax.swing.JFrame implements SearchWorker.ISear
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDirectoryButtonActionPerformed
-        JFileChooser fc = new JFileChooser(".");
+        JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = fc.showOpenDialog(this);
 
@@ -261,6 +256,21 @@ public class MainWindow extends javax.swing.JFrame implements SearchWorker.ISear
     @Override
     public void onSearchCompleted(List<SearchResult> results) {
         System.out.println("Search completed!");
+        final List<SearchResult> fResults = results;
+
+        imageList.setModel(new javax.swing.AbstractListModel() {
+            
+            @Override
+            public int getSize() {
+                return fResults.size();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                return fResults.get(i);
+            }
+        });
+
         isSearching = false;
         updateUiComponentStates();
     }
