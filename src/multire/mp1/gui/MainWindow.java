@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
-import javax.swing.filechooser.FileFilter;
 import multire.mp1.search.*;
 import multire.mp1.search.hrcc.HRCCSearchStrategy;
 
@@ -163,6 +162,7 @@ public class MainWindow extends javax.swing.JFrame implements SearchWorker.ISear
             .addContainerGap())
     );
 
+    imageList.setCellRenderer(new SearchResultCellRenderer());
     jScrollPane1.setViewportView(imageList);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

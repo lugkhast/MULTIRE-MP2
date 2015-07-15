@@ -217,6 +217,9 @@
               <StringArray count="0"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="imageList.setCellRenderer(new SearchResultCellRenderer());"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
