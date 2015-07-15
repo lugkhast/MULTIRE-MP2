@@ -7,8 +7,10 @@ package multire.mp1.gui;
 
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileFilter;
 import multire.mp1.search.*;
 import multire.mp1.search.hrcc.HRCCSearchStrategy;
 
@@ -16,10 +18,11 @@ import multire.mp1.search.hrcc.HRCCSearchStrategy;
  *
  * @author lugkhast
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame implements SearchWorker.ISearchWorker {
 
     private ImageSearchEngine searchEngine;
     private boolean isPreprocessing = false;
+    private boolean isSearching = false;
 
     /**
      * Creates new form MainWindow
@@ -99,6 +102,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         selectImageButton.setText("Select Image");
         selectImageButton.setEnabled(false);
+        selectImageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectImageButtonActionPerformed(evt);
+            }
+        });
 
         algoSelectComboBox.setModel(new javax.swing.DefaultComboBoxModel(
             new SearchStrategy[] {new HRCCSearchStrategy()})
@@ -206,7 +214,7 @@ public class MainWindow extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             SearchStrategy strategy = (SearchStrategy) evt.getItem();
             searchEngine.setSearchStrategy(strategy);
-            
+
             updateUiComponentStates();
         }
     }//GEN-LAST:event_algoSelectComboBoxItemStateChanged
@@ -214,8 +222,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void preprocessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preprocessButtonActionPerformed
         isPreprocessing = true;
         updateUiComponentStates();
-        
-        
+
         SwingWorker worker = new SwingWorker<Void, Void>() {
 
             @Override
@@ -223,25 +230,55 @@ public class MainWindow extends javax.swing.JFrame {
                 searchEngine.preprocessImages();
                 return null;
             }
-            
+
+            @Override
             public void done() {
                 isPreprocessing = false;
                 updateUiComponentStates();
             }
         };
-        
+
         worker.execute();
     }//GEN-LAST:event_preprocessButtonActionPerformed
+
+    private void selectImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectImageButtonActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setFileFilter(new ImageFileFilter());
+
+        int returnVal = fc.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fc.getSelectedFile();
+
+            SearchWorker worker = new SearchWorker(searchEngine, selectedFile, this);
+            worker.execute();
+
+            isSearching = true;
+            updateUiComponentStates();
+        }
+    }//GEN-LAST:event_selectImageButtonActionPerformed
+
+    @Override
+    public void onSearchCompleted(List<SearchResult> results) {
+        System.out.println("Search completed!");
+        isSearching = false;
+        updateUiComponentStates();
+    }
 
     public void updateUiComponentStates() {
         boolean hasDirectory, hasAlgorithm, isPreprocessed;
         hasDirectory = searchEngine.getDirectoryToSearch() != null;
         hasAlgorithm = searchEngine.getSearchStrategy() != null;
         isPreprocessed = searchEngine.hasPreprocessedImages();
-        
+
         preprocessProgressBar.setVisible(false);
-        
-        if (isPreprocessing) {
+
+        if (isPreprocessing || isSearching) {
+            if (isPreprocessing) {
+                preprocessProgressBar.setString("Preprocessing");
+            } else {
+                preprocessProgressBar.setString("Searching...");
+            }
             preprocessProgressBar.setVisible(true);
             preprocessButton.setEnabled(false);
             selectImageButton.setEnabled(false);
@@ -307,4 +344,5 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel searchDirectoryLabel;
     private javax.swing.JButton selectImageButton;
     // End of variables declaration//GEN-END:variables
+
 }

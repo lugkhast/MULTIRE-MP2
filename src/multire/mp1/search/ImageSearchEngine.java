@@ -28,29 +28,6 @@ public class ImageSearchEngine {
     public ImageSearchEngine() {
     }
 
-    private class ImageFileFilter implements FileFilter {
-
-        /**
-         * A really crude way to filter for image files
-         */
-        String[] acceptedExtensions = {
-            "jpg", "jpeg",
-            "png"
-        };
-
-        @Override
-        public boolean accept(File file) {
-            for (String acceptedExtension : acceptedExtensions) {
-                if (file.getName().endsWith(acceptedExtension)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-    }
-
     public List<SearchResult> runImageSearch(File queryImageFile) throws IOException {
         if (searchStrategy == null || directoryToSearch == null) {
             return null;
@@ -99,7 +76,7 @@ public class ImageSearchEngine {
     /**
      * @param directoryToSearch the directoryToSearch to set
      */
-    public void setDirectoryToSearch(File directoryToSearch){
+    public void setDirectoryToSearch(File directoryToSearch) {
         this.directoryToSearch = directoryToSearch;
         this.preprocessedImages = null;
     }
@@ -120,7 +97,7 @@ public class ImageSearchEngine {
             );
         }
     }
-    
+
     public boolean hasPreprocessedImages() {
         return preprocessedImages != null;
     }
