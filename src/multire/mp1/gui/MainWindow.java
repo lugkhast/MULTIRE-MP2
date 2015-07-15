@@ -18,6 +18,7 @@ import multire.mp1.search.hrcc.HRCCSearchStrategy;
 public class MainWindow extends javax.swing.JFrame {
 
     private ImageSearchEngine searchEngine;
+    private boolean isPreprocessing = false;
 
     /**
      * Creates new form MainWindow
@@ -26,6 +27,7 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         searchEngine = new ImageSearchEngine();
         searchEngine.setSearchStrategy(new HRCCSearchStrategy());
+        updateUiComponentStates();
     }
 
     /**
@@ -46,6 +48,7 @@ public class MainWindow extends javax.swing.JFrame {
         algoSelectComboBox = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         preprocessButton = new javax.swing.JButton();
+        preprocessProgressBar = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         imageList = new javax.swing.JList();
 
@@ -111,6 +114,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     preprocessButton.setText("Preprocess Images");
     preprocessButton.setEnabled(false);
+    preprocessButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            preprocessButtonActionPerformed(evt);
+        }
+    });
+
+    preprocessProgressBar.setIndeterminate(true);
+    preprocessProgressBar.setString("Preprocessing...");
+    preprocessProgressBar.setStringPainted(true);
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
@@ -119,10 +131,11 @@ public class MainWindow extends javax.swing.JFrame {
         .addGroup(jPanel2Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(selectImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addComponent(selectImageButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(algoSelectComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(preprocessButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(preprocessButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(preprocessProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel2Layout.setVerticalGroup(
@@ -132,7 +145,9 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(selectImageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(preprocessButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(preprocessProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(algoSelectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -190,22 +205,37 @@ public class MainWindow extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             SearchStrategy strategy = (SearchStrategy) evt.getItem();
             searchEngine.setSearchStrategy(strategy);
+            
             updateUiComponentStates();
         }
     }//GEN-LAST:event_algoSelectComboBoxItemStateChanged
+
+    private void preprocessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preprocessButtonActionPerformed
+        isPreprocessing = true;
+        updateUiComponentStates();
+    }//GEN-LAST:event_preprocessButtonActionPerformed
 
     public void updateUiComponentStates() {
         boolean hasDirectory, hasAlgorithm, isPreprocessed;
         hasDirectory = searchEngine.getDirectoryToSearch() != null;
         hasAlgorithm = searchEngine.getSearchStrategy() != null;
         isPreprocessed = searchEngine.hasPreprocessedImages();
-
-        if (!isPreprocessed) {
+        
+        preprocessProgressBar.setVisible(false);
+        
+        if (isPreprocessing) {
+            preprocessProgressBar.setVisible(true);
+            preprocessButton.setEnabled(false);
+            selectImageButton.setEnabled(false);
+            searchDirectoryButton.setEnabled(false);
+        } else if (!isPreprocessed) {
             preprocessButton.setEnabled(hasDirectory && hasAlgorithm);
             selectImageButton.setEnabled(false);
+            searchDirectoryButton.setEnabled(true);
         } else {
             preprocessButton.setEnabled(false);
             selectImageButton.setEnabled(true);
+            searchDirectoryButton.setEnabled(true);
         }
 
     }
@@ -254,6 +284,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton preprocessButton;
+    private javax.swing.JProgressBar preprocessProgressBar;
     private javax.swing.JButton searchDirectoryButton;
     private javax.swing.JLabel searchDirectoryLabel;
     private javax.swing.JButton selectImageButton;
