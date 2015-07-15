@@ -237,4 +237,9 @@ public class HRCCSearchStrategy implements SearchStrategy {
 
         System.out.println("Done!");
     }
+
+    @Override
+    public String toString() {
+        return "Histogram Refinement - Color Coherence";
+    }
 }

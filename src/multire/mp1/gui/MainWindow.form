@@ -63,7 +63,7 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="searchDirectoryLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="600" max="32767" attributes="0"/>
+                  <EmptySpace pref="474" max="32767" attributes="0"/>
                   <Component id="searchDirectoryButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -91,6 +91,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Set Search Directory"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchDirectoryButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -104,7 +107,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="searchDirectoryLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="not specified"/>
+            <Property name="text" type="java.lang.String" value="not specified - select a directory"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -125,8 +128,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="selectImageButton" pref="204" max="32767" attributes="0"/>
-                      <Component id="jComboBox1" max="32767" attributes="0"/>
+                      <Component id="algoSelectComboBox" max="32767" attributes="0"/>
                       <Component id="jLabel2" max="32767" attributes="0"/>
+                      <Component id="preprocessButton" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -137,10 +141,12 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="selectImageButton" min="-2" pref="181" max="-2" attributes="0"/>
-                  <EmptySpace pref="233" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="preprocessButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="201" max="32767" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                  <Component id="algoSelectComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -150,19 +156,18 @@
         <Component class="javax.swing.JButton" name="selectImageButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Select Image"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
+        <Component class="javax.swing.JComboBox" name="algoSelectComboBox">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(&#xa;    new SearchStrategy[] {new HRCCSearchStrategy()})&#xa;" type="code"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="algoSelectComboBoxItemStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -173,6 +178,12 @@
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Algorithm"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="preprocessButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Preprocess Images"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -57,4 +57,15 @@ public class SearchResult implements Comparable<SearchResult> {
             return 0;
         }
     }
+
+    @Override
+    public String toString() {
+        String filename = "(no filename)";
+        
+        if (preprocessedImage != null) {
+            filename = preprocessedImage.getImageFile().getName();
+        }
+        
+        return String.format("[%010.2f] %s", this.score, filename);
+    }
 }

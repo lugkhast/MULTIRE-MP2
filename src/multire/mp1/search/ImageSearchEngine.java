@@ -86,6 +86,7 @@ public class ImageSearchEngine {
      */
     public void setSearchStrategy(SearchStrategy searchStrategy) {
         this.searchStrategy = searchStrategy;
+        this.preprocessedImages = null;
     }
 
     /**
@@ -97,11 +98,13 @@ public class ImageSearchEngine {
 
     /**
      * @param directoryToSearch the directoryToSearch to set
-     * @throws java.io.IOException
      */
-    public void setDirectoryToSearch(File directoryToSearch) throws IOException {
+    public void setDirectoryToSearch(File directoryToSearch){
         this.directoryToSearch = directoryToSearch;
+        this.preprocessedImages = null;
+    }
 
+    public void preprocessImages() throws IOException {
         File[] imageFiles = directoryToSearch.listFiles(new ImageFileFilter());
         PreprocessedImage prepImage;
         preprocessedImages = new ArrayList<>();
@@ -117,6 +120,10 @@ public class ImageSearchEngine {
             );
         }
     }
+    
+    public boolean hasPreprocessedImages() {
+        return preprocessedImages != null;
+    }
 
     public static void main(String[] args) {
         File directory = new File("/home/lugkhast/Desktop/MULTIRE/");
@@ -129,6 +136,7 @@ public class ImageSearchEngine {
             System.out.println("Starting...");
             searchEngine.setSearchStrategy(strategy);
             searchEngine.setDirectoryToSearch(directory);
+            searchEngine.preprocessImages();
 
             System.out.println("Running image search...");
             results = searchEngine.runImageSearch(query);
