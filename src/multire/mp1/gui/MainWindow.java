@@ -8,6 +8,7 @@ package multire.mp1.gui;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.SwingWorker;
 import multire.mp1.search.*;
 import multire.mp1.search.hrcc.HRCCSearchStrategy;
 
@@ -213,6 +214,23 @@ public class MainWindow extends javax.swing.JFrame {
     private void preprocessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preprocessButtonActionPerformed
         isPreprocessing = true;
         updateUiComponentStates();
+        
+        
+        SwingWorker worker = new SwingWorker<Void, Void>() {
+
+            @Override
+            protected Void doInBackground() throws Exception {
+                searchEngine.preprocessImages();
+                return null;
+            }
+            
+            public void done() {
+                isPreprocessing = false;
+                updateUiComponentStates();
+            }
+        };
+        
+        worker.execute();
     }//GEN-LAST:event_preprocessButtonActionPerformed
 
     public void updateUiComponentStates() {
