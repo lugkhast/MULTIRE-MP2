@@ -133,6 +133,7 @@ public class ImageSearchEngine {
     }
     
     public SearchStrategy[] getImplementedSearchStrategies() {
+        // Instantiate implemented SearchStrategies here!
         return new SearchStrategy[] {
             new CHSearchStrategy(),
             new HRCCSearchStrategy()
