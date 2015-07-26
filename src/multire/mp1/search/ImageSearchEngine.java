@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import multire.mp1.search.ch.CHSearchStrategy;
 import multire.mp1.search.hrcc.HRCCSearchStrategy;
 
 /**
@@ -129,6 +130,13 @@ public class ImageSearchEngine {
         } catch (IOException ex) {
             Logger.getLogger(ImageSearchEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public SearchStrategy[] getImplementedSearchStrategies() {
+        return new SearchStrategy[] {
+            new CHSearchStrategy(),
+            new HRCCSearchStrategy()
+        };
     }
 
 }
